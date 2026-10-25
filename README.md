@@ -20,22 +20,22 @@ The project covers:
 ## Dashboard Preview
 
 ### 1. Executive Dashboard
-![Executive Dashboard](images/01_executive.png)
+![Executive Dashboard](images/images1_executive.png)
 
 ### 2. Patient Analytics
-![Patient Analytics](images/02_patients.png)
+![Patient Analytics](images/images2_patients.png)
 
 ### 3. Clinical Analytics
-![Clinical Analytics](images/03_clinical.png)
+![Clinical Analytics](images/images3_clinical.png)
 
 ### 4. Financial Analysis
-![Financial Analysis](images/04_financial.png)
+![Financial Analysis](images/images4_financial.png)
 
 ### 5. Operational Analytics
-![Operational Analytics](images/05_operations.png)
+![Operational Analytics](images/images5_operations.png)
 
 ### 6. Patient Experience
-![Patient Experience](images/06_experience.png)
+![Patient Experience](images/images6_experience.png)
 
 ---
 
