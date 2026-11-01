@@ -49,12 +49,13 @@ HealthConnect-Rwanda/
 ├── database/
 │   └── healthconnect.backup            # PostgreSQL backup (custom format)
 ├── powerbi/
-│   └── HealthConnect_Rwanda.pbix       # interactive dashboard
+│   ├── Healthconnect_Rwanda.pbix            # Week 6 version
+│   └── Healthconnect_Rwanda_Week_7.pbix     # Week 7 refined version
+├── testing/
+│   └── HealthConnect_Test.xlsx              # Week 7 test log
 ├── reports/
-│   ├── Executive_Dashboard.pdf         # dashboard export
-│   ├── Business_Insights_Report.pdf    # findings and recommendations
-│   └── Executive_Presentation.pdf      # slides
-├── images/                             # dashboard screenshots used above
+│   └── Week7_Testing_and_Refinement_Report.pdf
+└── evidence/week7/                          # screenshots (filter tests, retests, cross-track)hboard screenshots used above
 └── README.md
 ```
 
@@ -141,6 +142,44 @@ Where possible a proxy is shown and labelled, for example appointments per bed.
 5. **Review the claims process:** half of the 42,036 claims are pending and 18,000 bills have no claim.
 6. **Address satisfaction.** With 40% of ratings at 1 or 2, introduce a feedback follow-up process and track the poor-rating trend monthly.
 7. **Plan for elderly and chronic care,** given the share of 65+ patients and the chronic-condition rate.
+## Week 7: Testing, Refinement and Validation
+
+Week 7 tests and refines the Week 6 dashboard instead of rebuilding it. The Week 6 version is preserved as `Healthconnect_Rwanda.pbix`; the refined version is `Healthconnect_Rwanda_Week_7.pbix`. My mentor confirmed that Week 7 continues with the same Rwanda dataset.
+
+### What was tested
+18 tests compared dashboard values with figures calculated independently from the source CSV files: month, visit type and facility filters, combined filters, reset behaviour, financial and patient-page values, and three reconciliations. **15 passed first time. 3 failed first time and passed after fixes (T13, T16, T17).** The full record is in `testing/HealthConnect_Test.xlsx` and the report.
+
+### Issues found and refinements made
+
+| ID | Issue | Fix |
+|---|---|---|
+| I1 | Payment-method donut, claims chart and comments chart disagreed with their KPI cards. A visual-level filter excluded a blank department_name, dropping unlinked records | Removed the exclusion where no facility or department split is needed |
+| I2 | A test measure included a (Blank) member that held the unlinked revenue, giving 8.39bn instead of 694.55M | Excluded the blank member; cross-checked against the decomposition tree |
+| I3 | Doctor counts depend on the join path: FacilityID and DepartmentID disagree for 1,187 of 1,250 staff | Added a Doctors by FacilityID measure; counts are 18 (HF001 to HF010) and 17 (HF011 to HF020), against 20 and 10 by department; both total 350 |
+| I4 | Satisfaction rankings implied real differences | Added ANOVA caveats (facility p = 0.55, department p = 0.88) |
+| I5 | Facility slicer does not change patient-level cards | Added an explanatory note |
+| I6 | Comments chart subtitle was out of date | Updated to 21,064 responses |
+| I7 | Follow-up visits do not reflect visit history (88.0% have no earlier visit) | Documented as a data limitation |
+
+### Analytical validation
+- The 5,000 appointment-linked records are a fair sample of the 60,000 bills and diagnoses (no significant differences in amounts, payment methods, status, diagnosis or severity mix).
+- Facility and department rankings are not statistically meaningful (satisfaction p = 0.55 and 0.88; appointment volumes p = 0.41).
+- Severity has no strong driver (diagnosis p = 0.19, department p = 0.20, visit type p = 0.91).
+- Repeat visits are rare: 4,443 patients made 5,000 appointments.
+
+### Cross-track validation (Data Science)
+Validated findings were shared with a Data Science intern, and I ran her three checks on her target, features and assumptions. Her independent recomputation agreed with my findings on coverage, the 4,744 facility conflict, the missing attendance field and the weak signal. The exchange produced issue I7. Her models perform at chance (hold-out AUC 0.479 before refinement, 0.455 after), which supports the finding that the data carries little predictive signal.
+
+### Changes since Week 6
+- Corrected the earlier staffing finding. The Week 6 view suggested five facilities had half the doctors; Week 7 testing showed this depends on which facility field is used, so no imbalance is claimed.
+- Corrected three visuals that dropped unlinked records.
+- Added statistical caveats to ranking visuals and a note to the Patient page.
+
+### Remaining limitations
+No attendance or no-show field exists, so attendance analysis is not possible on this dataset. Most financial, diagnosis and feedback records are unlinked to appointments. Staff facility records conflict. Admissions, laboratory, prescription, referral, facility master and insurance master tables were not supplied. The data looks synthetic, with most categories almost perfectly even.
+
+### Week 8 plan
+Re-run the full test log on the final dashboard, extend validation to a second track, and prepare the final presentation using the validated findings and limitations.
 
 ---
 
